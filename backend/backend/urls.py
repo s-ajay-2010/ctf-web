@@ -11,4 +11,6 @@ urlpatterns = [
     path("register/", auth.register),
     path("", root.alive),
     path("ctf/create/", ctf_ops.ch_cr),
+    path("ctf/edit/<int:cid>/", ctf_ops.ch_ed),
+    path("ctf/delete/<int:cid>/", ctf_ops.ch_del),
 ]

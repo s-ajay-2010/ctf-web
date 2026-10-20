@@ -19,8 +19,6 @@ class CTF(models.Model):
     pts   = models.IntegerField(default=10) #points
     ctg   = models.CharField(max_length=30, blank=False) #category
     diff  = models.CharField(max_length=10, blank=False) #diffculty
-    hints = models.CharField(max_length=200, blank=False)
-    hc    = models.IntegerField(blank=False) #hint_cost, i.e. the points you loose for hint reveal
     asset = models.BooleanField(default=False) #any file present to be downloaded?
     fl    = models.CharField(max_length=500, blank=True) #file_link
 
@@ -30,3 +28,20 @@ class Submission(models.Model):
     user  = models.ForeignKey(User, on_delete=models.CASCADE)
     hu    = models.IntegerField(default=0) #the hints used count
     pa    = models.IntegerField() #points awarded, NOT the project's property, defined for a user's submission
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['c', 'user'], name='unique_submission')
+        ]
+
+class Hints(models.Model):
+    c    = models.ForeignKey(CTF, on_delete=models.CASCADE, related_name= "hints") #challenge(_id)
+    hints = models.CharField(max_length=200, blank=False)
+    hc    = models.IntegerField(blank=False) #hint_cost, i.e. the points you loose for hint reveal
+
+class HintUse(models.Model):
+    user  = models.ForeignKey(User, on_delete=models.CASCADE)
+    hint  = models.ForeignKey(Hints, on_delete=models.CASCADE)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'hint'], name='unique_hint_use')
+        ]

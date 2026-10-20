@@ -13,4 +13,6 @@ urlpatterns = [
     path("ctf/create/", ctf_ops.ch_cr),
     path("ctf/edit/<int:cid>/", ctf_ops.ch_ed),
     path("ctf/delete/<int:cid>/", ctf_ops.ch_del),
+    path("ctf/<int:cid>/hints/<int:hid>/", ctf_ops.hint_get),
+    path("ctf/<int:cid>/submit/", ctf_ops.ch_sb),
 ]

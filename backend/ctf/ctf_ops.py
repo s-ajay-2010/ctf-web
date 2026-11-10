@@ -309,4 +309,20 @@ def ch_sb(request, cid):
             "total_points": profile.points
         }, status=201)
 
+#ch_lb = challenge_leaderboard
+def ch_lb(request):
+    if request.method != "GET":
+        return JsonResponse({
+            "error": "GET requests only gng"
+        }, status=405)
 
+    profiles = (models.Profile.objects.select_related("user").order_by("-points", "user_id")[:50])
+    data = [{
+        "rank": i,
+        "username": p.user.username,
+        "points": p.points,
+    } for i, p in enumerate(profiles, start=1)]
+
+    return JsonResponse({
+        "leaderboard": data,
+    }, status=200)
